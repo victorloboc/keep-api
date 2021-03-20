@@ -36,4 +36,16 @@ public class Usuario {
 		return senha;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
 }

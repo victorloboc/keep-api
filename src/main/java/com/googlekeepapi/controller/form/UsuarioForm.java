@@ -5,6 +5,9 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.googlekeepapi.modelo.Usuario;
+import com.googlekeepapi.repository.UsuarioRepository;
+
 public class UsuarioForm {
 	@NotNull
 	@NotEmpty
@@ -21,6 +24,14 @@ public class UsuarioForm {
 
 	public String getSenha() {
 		return senha;
+	}
+
+	public Usuario atualizar(Long id, UsuarioRepository usuarioRepository) {
+		Usuario usuario = usuarioRepository.getOne(id);
+		usuario.setEmail(this.email);
+		usuario.setSenha(this.senha);
+		
+		return usuario;
 	}
 
 }
