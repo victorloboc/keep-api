@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -59,6 +60,20 @@ public class UsuarioController {
 			return ResponseEntity.ok(new UsuarioDto(usuario));	
 		}
 		
+		return ResponseEntity.notFound().build();
+	}
+	
+	//EXCLUIR USUARIO
+	
+	@DeleteMapping("/{id}")
+	@Transactional
+	public ResponseEntity<?> excluirUsuario(@PathVariable Long id) {
+		
+		Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
+		if(usuarioOptional.isPresent()) {
+			usuarioRepository.deleteById(id);
+			return ResponseEntity.ok().build();
+		}
 		return ResponseEntity.notFound().build();
 	}
 	
