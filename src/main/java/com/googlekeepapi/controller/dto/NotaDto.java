@@ -64,6 +64,16 @@ public class NotaDto {
 		return corNota;
 	}
 	
+	public List<NotaDto> converter(List<Nota> notas) {
+		List<NotaDto> notasDto = new ArrayList<NotaDto>();
+		
+		for(Nota nota : notas) {
+			NotaDto notaDto = new NotaDto(nota);
+			notasDto.add(notaDto);
+		}
+		return notasDto;
+		
+	}
 	
 
 }

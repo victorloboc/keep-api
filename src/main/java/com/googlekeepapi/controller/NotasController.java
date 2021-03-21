@@ -1,6 +1,8 @@
 package com.googlekeepapi.controller;
 
 import java.net.URI;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -8,6 +10,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +24,7 @@ import com.googlekeepapi.controller.dto.NotaDto;
 import com.googlekeepapi.controller.form.NotaForm;
 import com.googlekeepapi.controller.form.NotaFormAtualizacao;
 import com.googlekeepapi.modelo.Nota;
+import com.googlekeepapi.modelo.Usuario;
 import com.googlekeepapi.repository.MarcadorRepository;
 import com.googlekeepapi.repository.NotaRepository;
 import com.googlekeepapi.repository.UsuarioRepository;
@@ -62,5 +67,38 @@ public class NotasController {
 		
 		return ResponseEntity.notFound().build();
 	}
-
+	
+	//LISTAR NOTAS DE CADA USUARIO
+	
+	@GetMapping("/{idUsuario}")
+	public ResponseEntity<List<NotaDto>> listarNotas(@PathVariable Long idUsuario) {
+		Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
+		if(usuarioOptional.isPresent()) {
+			List<Nota> notas = notaRepository.findByUsuario_Id(idUsuario);
+			return ResponseEntity.ok(new NotaDto().converter(notas));
+		}
+			
+		return ResponseEntity.notFound().build();
+	}
+	
+	@GetMapping
+	public ResponseEntity<?> notFound(){
+		return ResponseEntity.notFound().build();
+	}
+	
+	//DELETAR NOTA
+	
+	@DeleteMapping("/{id}")
+	@Transactional
+	public ResponseEntity<?> deletarNota(@PathVariable Long id) {
+		Optional<Nota> notaOptional = notaRepository.findById(id);
+		if(notaOptional.isPresent()) {
+			notaRepository.deleteById(id);
+			return ResponseEntity.ok().build();
+		}
+		return ResponseEntity.notFound().build();
+	}
 }
+
+
+
