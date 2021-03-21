@@ -1,5 +1,7 @@
 package com.googlekeepapi.modelo;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +16,7 @@ public class Usuario {
 	private Long id;
 	private String email;
 	private String senha;
+	private LocalDateTime dataCriacaoUsuario = LocalDateTime.now();
 
 	public Usuario() {
 	}
@@ -22,6 +25,10 @@ public class Usuario {
 		super();
 		this.email = usuarioForm.getEmail();
 		this.senha = usuarioForm.getSenha();
+	}
+	
+	public Usuario(String email) {
+		this.email = email;
 	}
 
 	public Long getId() {
@@ -48,4 +55,13 @@ public class Usuario {
 		this.senha = senha;
 	}
 
+	public LocalDateTime getDataCriacaoUsuario() {
+		return dataCriacaoUsuario;
+	}
+
+	public void setDataCriacaoUsuario(LocalDateTime dataCriacaoUsuario) {
+		this.dataCriacaoUsuario = dataCriacaoUsuario;
+	}
+
+	
 }
