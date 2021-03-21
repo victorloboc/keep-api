@@ -43,33 +43,68 @@ public class Nota {
 		return id;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getTitulo() {
 		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
 	}
 
 	public String getTexto() {
 		return texto;
 	}
 
+	public void setTexto(String texto) {
+		this.texto = texto;
+	}
 
 	public Cor getCorNota() {
 		return corNota;
+	}
+
+	public void setCorNota(Cor corNota) {
+		this.corNota = corNota;
 	}
 
 	public Marcador getMarcador() {
 		return marcador;
 	}
 
+	public void setMarcador(Marcador marcador) {
+		this.marcador = marcador;
+	}
+
 	public Boolean getFixar() {
 		return fixar;
+	}
+
+	public void setFixar(Boolean fixar) {
+		this.fixar = fixar;
 	}
 
 	public LocalDateTime getDataCriacao() {
 		return dataCriacao;
 	}
 
+	public void setDataCriacao(LocalDateTime dataCriacao) {
+		this.dataCriacao = dataCriacao;
+	}
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	
+	
+	
 
 }
