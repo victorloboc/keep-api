@@ -9,4 +9,5 @@ Implementação de uma API REST com recursos similares ao aplicativo de anotaç�
 - Spring Data JPA
 - MySQL
 
-![image](https://user-images.githubusercontent.com/62680318/112050663-e1072e00-8b2f-11eb-967a-32f80eb7061d.png)
+![image](https://user-images.githubusercontent.com/62680318/112052285-b4541600-8b31-11eb-88e7-7c5efab0e20e.png)
+
