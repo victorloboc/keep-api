@@ -5,5 +5,6 @@ Implementação de uma API REST com recursos similares ao aplicativo de anotaç�
 - Java
 - Apache Maven
 - Spring Boot 
+- Spring Web
 - Spring Data JPA
 - MySQL
