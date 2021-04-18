@@ -26,6 +26,7 @@ public class Nota {
 	@ManyToOne
 	private Usuario usuario;
 
+	@Deprecated
 	public Nota() {
 	}
 

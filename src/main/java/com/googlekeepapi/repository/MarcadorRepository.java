@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.googlekeepapi.modelo.Marcador;
 
-public interface MarcadorRepository extends JpaRepository<Marcador, String>{
+public interface MarcadorRepository extends JpaRepository<Marcador, Long>{
 	Marcador findByNome(String nome);
 }

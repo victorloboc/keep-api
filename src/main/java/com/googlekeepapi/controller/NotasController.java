@@ -2,7 +2,6 @@ package com.googlekeepapi.controller;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -71,7 +70,7 @@ public class NotasController {
 	//LISTAR NOTAS DE CADA USUARIO
 	
 	@GetMapping("/{idUsuario}")
-	public ResponseEntity<List<NotaDto>> listarNotas(@PathVariable Long idUsuario) {
+	public ResponseEntity<List<NotaDto>> listarNotas(@PathVariable Long idUsuario) {		
 		Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
 		if(usuarioOptional.isPresent()) {
 			List<Nota> notas = notaRepository.findByUsuario_Id(idUsuario);
