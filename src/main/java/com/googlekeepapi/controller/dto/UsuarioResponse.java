@@ -2,12 +2,12 @@ package com.googlekeepapi.controller.dto;
 
 import com.googlekeepapi.modelo.Usuario;
 
-public class UsuarioDto {
+public class UsuarioResponse {
 
 	private Long id;
 	private String email;
 
-	public UsuarioDto(Usuario usuario) {
+	public UsuarioResponse(Usuario usuario) {
 		this.id = usuario.getId();
 		this.email = usuario.getEmail();
 	}

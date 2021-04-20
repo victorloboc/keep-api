@@ -19,12 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.googlekeepapi.controller.dto.NotaDto;
-import com.googlekeepapi.controller.form.NotaForm;
-import com.googlekeepapi.controller.form.NotaFormAtualizacao;
+import com.googlekeepapi.controller.dto.NotaResponse;
+import com.googlekeepapi.controller.dto.NotaRequest;
+import com.googlekeepapi.controller.dto.NotaRequestUpdate;
 import com.googlekeepapi.modelo.Nota;
 import com.googlekeepapi.modelo.Usuario;
-import com.googlekeepapi.repository.MarcadorRepository;
 import com.googlekeepapi.repository.NotaRepository;
 import com.googlekeepapi.repository.UsuarioRepository;
 
@@ -32,8 +31,6 @@ import com.googlekeepapi.repository.UsuarioRepository;
 @RequestMapping("/notas")
 public class NotasController {
 
-	@Autowired
-	private MarcadorRepository marcadorRepository;
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	@Autowired
@@ -43,25 +40,30 @@ public class NotasController {
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<NotaDto> cadastrarNovaNota(@RequestBody @Valid NotaForm notaForm, 
+	public ResponseEntity<NotaResponse> cadastrarNovaNota(@RequestBody @Valid NotaRequest notaRequest, 
 			UriComponentsBuilder uriBuilder) {
-		Nota nota = notaForm.converter(usuarioRepository, marcadorRepository);
-		notaRepository.save(nota);
+		Usuario usuario = usuarioRepository.findByEmail(notaRequest.getEmailUsuario());
+		if(usuario != null) {
+			Nota nota = notaRequest.toNota(usuarioRepository);
+			notaRepository.save(nota);
+			
+			URI uri = uriBuilder.path("/notas/{id}").buildAndExpand(nota.getId()).toUri();
+			return ResponseEntity.created(uri).body(new NotaResponse(nota));
+		}
 		
-		URI uri = uriBuilder.path("/notas/{id}").buildAndExpand(nota.getId()).toUri();
-		return ResponseEntity.created(uri).body(new NotaDto(nota));
+		return ResponseEntity.notFound().build();
 	}
 	
 	//ALTERAR NOTA
 	
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<NotaDto> alterarNota(@PathVariable Long id, 
-			@RequestBody @Valid NotaFormAtualizacao notaFormAtualizacao){
+	public ResponseEntity<NotaResponse> alterarNota(@PathVariable Long id, 
+			@RequestBody @Valid NotaRequestUpdate notaUpdate){
 		Optional<Nota> notaOpcional = notaRepository.findById(id);
 		if(notaOpcional.isPresent()) {
-			Nota nota = notaFormAtualizacao.atualizar(id, notaRepository, marcadorRepository);
-			return ResponseEntity.ok(new NotaDto(nota));
+			Nota nota = notaUpdate.atualizar(id, notaRepository);
+			return ResponseEntity.ok(new NotaResponse(nota));
 		}
 		
 		return ResponseEntity.notFound().build();
@@ -70,20 +72,16 @@ public class NotasController {
 	//LISTAR NOTAS DE CADA USUARIO
 	
 	@GetMapping("/{idUsuario}")
-	public ResponseEntity<List<NotaDto>> listarNotas(@PathVariable Long idUsuario) {		
+	public ResponseEntity<List<NotaResponse>> listarNotas(@PathVariable Long idUsuario) {		
 		Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
 		if(usuarioOptional.isPresent()) {
 			List<Nota> notas = notaRepository.findByUsuario_Id(idUsuario);
-			return ResponseEntity.ok(new NotaDto().converter(notas));
+			return ResponseEntity.ok(new NotaResponse().toList(notas));
 		}
 			
 		return ResponseEntity.notFound().build();
 	}
 	
-	@GetMapping
-	public ResponseEntity<?> notFound(){
-		return ResponseEntity.notFound().build();
-	}
 	
 	//DELETAR NOTA
 	

@@ -1,19 +1,18 @@
-package com.googlekeepapi.controller.form;
+package com.googlekeepapi.controller.dto;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.validator.constraints.Length;
-
+import com.googlekeepapi.config.validacao.ValorUnico;
 import com.googlekeepapi.modelo.Usuario;
 import com.googlekeepapi.repository.UsuarioRepository;
 
-public class UsuarioForm {
-	@NotNull
+public class UsuarioRequest {
+	
 	@NotEmpty
-	@Length(min = 15)
+	@Email
+	@ValorUnico(campo = "email", entidade = Usuario.class)
 	private String email;
-	@NotNull
 	@NotEmpty
 	@Length(min = 8)
 	private String senha;
@@ -32,6 +31,10 @@ public class UsuarioForm {
 		usuario.setSenha(this.senha);
 		
 		return usuario;
+	}
+
+	public Usuario toUsuario() {
+		return new Usuario(this.email, this.senha);
 	}
 
 }

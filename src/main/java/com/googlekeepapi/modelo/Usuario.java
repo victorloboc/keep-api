@@ -2,18 +2,20 @@ package com.googlekeepapi.modelo;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import com.googlekeepapi.controller.form.UsuarioForm;
+import com.googlekeepapi.config.validacao.ValorUnico;
 
 @Entity
 public class Usuario {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@ValorUnico(campo = "email", entidade = Usuario.class)
+	@Column(unique = true)
 	private String email;
 	private String senha;
 	private LocalDateTime dataCriacaoUsuario = LocalDateTime.now();
@@ -21,12 +23,12 @@ public class Usuario {
 	public Usuario() {
 	}
 
-	public Usuario(UsuarioForm usuarioForm) {
+	public Usuario(String email, String senha) {
 		super();
-		this.email = usuarioForm.getEmail();
-		this.senha = usuarioForm.getSenha();
+		this.email = email;
+		this.senha = senha;
 	}
-	
+
 	public Usuario(String email) {
 		this.email = email;
 	}
@@ -63,5 +65,4 @@ public class Usuario {
 		this.dataCriacaoUsuario = dataCriacaoUsuario;
 	}
 
-	
 }

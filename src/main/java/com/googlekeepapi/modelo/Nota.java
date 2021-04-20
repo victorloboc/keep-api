@@ -19,8 +19,7 @@ public class Nota {
 	private String texto;
 	@Enumerated(EnumType.STRING)
 	private Cor corNota;
-	@ManyToOne
-	private Marcador marcador;
+	private String marcador;
 	private Boolean fixar;
 	private LocalDateTime dataCriacao = LocalDateTime.now();
 	@ManyToOne
@@ -30,7 +29,7 @@ public class Nota {
 	public Nota() {
 	}
 
-	public Nota(String titulo, String texto, Marcador marcador, Boolean fixar, Usuario usuario, Cor corNota) {
+	public Nota(String titulo, String texto, String marcador, Boolean fixar, Usuario usuario, Cor corNota) {
 		super();
 		this.titulo = titulo;
 		this.texto = texto;
@@ -72,11 +71,11 @@ public class Nota {
 		this.corNota = corNota;
 	}
 
-	public Marcador getMarcador() {
+	public String getMarcador() {
 		return marcador;
 	}
 
-	public void setMarcador(Marcador marcador) {
+	public void setMarcador(String marcador) {
 		this.marcador = marcador;
 	}
 
@@ -104,8 +103,5 @@ public class Nota {
 		this.usuario = usuario;
 	}
 
-	
-	
-	
 
 }

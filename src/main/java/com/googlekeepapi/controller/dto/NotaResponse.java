@@ -4,10 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.googlekeepapi.modelo.Marcador;
 import com.googlekeepapi.modelo.Nota;
 
-public class NotaDto {
+public class NotaResponse {
 	private Long id;
 	private String titulo;
 	private String texto;
@@ -17,19 +16,18 @@ public class NotaDto {
 	private String marcador;
 	private Boolean fixar;
 
-	public NotaDto(Nota nota) {
+	public NotaResponse(Nota nota) {
 		this.id = nota.getId();
 		this.titulo = nota.getTitulo();
 		this.texto = nota.getTexto();
 		this.dataCriacao = nota.getDataCriacao();
 		this.emailUsuario = nota.getUsuario().getEmail();
 		this.corNota = nota.getCorNota().name();
-		this.marcador = nota.getMarcador().getNome();
+		this.marcador = nota.getMarcador();
 		this.fixar = nota.getFixar();
 	}
 
-	public NotaDto() {
-		super();
+	public NotaResponse() {
 	}
 
 	public Long getId() {
@@ -64,14 +62,14 @@ public class NotaDto {
 		return corNota;
 	}
 	
-	public List<NotaDto> converter(List<Nota> notas) {
-		List<NotaDto> notasDto = new ArrayList<NotaDto>();
+	public List<NotaResponse> toList(List<Nota> notas) {
+		List<NotaResponse> notasResponse = new ArrayList<NotaResponse>();
 		
 		for(Nota nota : notas) {
-			NotaDto notaDto = new NotaDto(nota);
-			notasDto.add(notaDto);
+			NotaResponse notaDto = new NotaResponse(nota);
+			notasResponse.add(notaDto);
 		}
-		return notasDto;
+		return notasResponse;
 		
 	}
 	

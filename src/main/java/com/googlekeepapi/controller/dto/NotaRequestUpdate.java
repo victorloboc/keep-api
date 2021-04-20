@@ -1,26 +1,14 @@
-package com.googlekeepapi.controller.form;
+package com.googlekeepapi.controller.dto;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.validator.constraints.Length;
 
 import com.googlekeepapi.modelo.Cor;
-import com.googlekeepapi.modelo.Marcador;
 import com.googlekeepapi.modelo.Nota;
-import com.googlekeepapi.modelo.Usuario;
-import com.googlekeepapi.repository.MarcadorRepository;
-import com.googlekeepapi.repository.UsuarioRepository;
+import com.googlekeepapi.repository.NotaRepository;
 
-public class NotaForm {
-	
-	@NotNull
-	@NotEmpty
-	@Length(min = 15)
-	@Email
-	private String emailUsuario;
-	@NotNull
+public class NotaRequestUpdate {
+
 	@NotEmpty
 	@Length(min = 15)
 	private String titulo;
@@ -68,21 +56,18 @@ public class NotaForm {
 	public void setFixar(Boolean fixar) {
 		this.fixar = fixar;
 	}
-
-	public String getEmailUsuario() {
-		return emailUsuario;
-	}
-
-	public void setEmailUsuario(String emailUsuario) {
-		this.emailUsuario = emailUsuario;
-	}
 	
-	public Nota converter(UsuarioRepository usuarioRepository, MarcadorRepository marcadorRepository) {
-		Usuario usuario = usuarioRepository.findByEmail(this.emailUsuario);
-		Marcador marcador = marcadorRepository.findByNome(this.marcador);
-		Cor cor = Cor.valueOf(corNota.toUpperCase());
+	public Nota atualizar(Long id, NotaRepository notaRepository) {
 		
-		return new Nota(this.titulo, this.texto, marcador, this.fixar, usuario, cor);
+		Nota nota = notaRepository.getOne(id);
+		Cor cor = Cor.valueOf(this.corNota.toUpperCase());
+		nota.setTitulo(this.titulo);
+		nota.setTexto(this.texto);
+		nota.setCorNota(cor);
+		nota.setMarcador(this.marcador);
+		nota.setFixar(this.fixar);
+
+		return nota;
 	}
 
 }

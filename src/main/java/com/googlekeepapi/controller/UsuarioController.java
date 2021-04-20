@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.googlekeepapi.controller.dto.UsuarioDto;
-import com.googlekeepapi.controller.form.UsuarioForm;
+import com.googlekeepapi.controller.dto.UsuarioResponse;
+import com.googlekeepapi.controller.dto.UsuarioRequest;
 import com.googlekeepapi.modelo.Usuario;
 import com.googlekeepapi.repository.UsuarioRepository;
 
@@ -33,31 +33,31 @@ public class UsuarioController {
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<UsuarioDto> cadastrarUsuario(@RequestBody @Valid UsuarioForm usuarioForm, 
+	public ResponseEntity<UsuarioResponse> cadastrarUsuario(@RequestBody @Valid UsuarioRequest usuarioRequest, 
 			UriComponentsBuilder uriBuilder) {
 		//persistência
-		Usuario usuario = new Usuario(usuarioForm);
+		Usuario usuario = usuarioRequest.toUsuario();
 		usuarioRepository.save(usuario);
 		
 		//uri da resposta da requisição
 		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri();
 	
-		return ResponseEntity.created(uri).body(new UsuarioDto(usuario)); //dto tem que ter os getters
+		return ResponseEntity.created(uri).body(new UsuarioResponse(usuario)); //dto tem que ter os getters
 	}
 	
 	//ALTERAR DADOS DO USUÁRIO
 	
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<UsuarioDto> alterarDadosUsuario(@PathVariable Long id, 
-			@RequestBody @Valid UsuarioForm usuarioForm) {
+	public ResponseEntity<UsuarioResponse> alterarDadosUsuario(@PathVariable Long id, 
+			@RequestBody @Valid UsuarioRequest usuarioRequest) {
 		
 		Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
 		if(usuarioOptional.isPresent()) { //verificando se existe usuario com o id recebido
-			Usuario usuario = usuarioForm.atualizar(id, usuarioRepository);
+			Usuario usuario = usuarioRequest.atualizar(id, usuarioRepository);
 			usuarioRepository.save(usuario);
 			
-			return ResponseEntity.ok(new UsuarioDto(usuario));	
+			return ResponseEntity.ok(new UsuarioResponse(usuario));	
 		}
 		
 		return ResponseEntity.notFound().build();
