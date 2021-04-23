@@ -1,5 +1,7 @@
 package com.googlekeepapi.controller.dto;
 
+import java.util.Optional;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
@@ -15,7 +17,7 @@ public class NotaRequest {
 	@Email
 	private String emailUsuario;
 	@NotEmpty
-	@Length(min = 15)
+	@Length(min = 8)
 	private String titulo;
 	private String texto = " ";
 	private String corNota = "padrao";
@@ -71,7 +73,8 @@ public class NotaRequest {
 	}
 	
 	public Nota toNota(UsuarioRepository usuarioRepository) {
-		Usuario usuario = usuarioRepository.findByEmail(this.emailUsuario);
+		Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(this.emailUsuario);
+		Usuario usuario = usuarioOptional.get();
 		Cor cor = Cor.valueOf(corNota.toUpperCase());
 		System.out.println(usuario.getEmail());
 		return new Nota(this.titulo, this.texto, this.marcador, this.fixar, usuario, cor);

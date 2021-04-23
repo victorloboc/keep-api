@@ -3,6 +3,8 @@ package com.googlekeepapi.controller.dto;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import com.googlekeepapi.config.validacao.ValorUnico;
 import com.googlekeepapi.modelo.Usuario;
 import com.googlekeepapi.repository.UsuarioRepository;
@@ -34,7 +36,7 @@ public class UsuarioRequest {
 	}
 
 	public Usuario toUsuario() {
-		return new Usuario(this.email, this.senha);
+		return new Usuario(this.email, new BCryptPasswordEncoder().encode(this.senha));
 	}
 
 }

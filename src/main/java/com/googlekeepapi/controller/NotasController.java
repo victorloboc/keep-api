@@ -46,8 +46,8 @@ public class NotasController {
 	@Transactional
 	public ResponseEntity<NotaResponse> cadastrarNovaNota(@RequestBody @Valid NotaRequest notaRequest, 
 			UriComponentsBuilder uriBuilder) {
-		Usuario usuario = usuarioRepository.findByEmail(notaRequest.getEmailUsuario());
-		if(usuario != null) {
+		Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(notaRequest.getEmailUsuario());
+		if(usuarioOptional.isPresent()) {
 			Nota nota = notaRequest.toNota(usuarioRepository);
 			notaRepository.save(nota);
 			
