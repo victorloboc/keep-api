@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.googlekeepapi.modelo.Nota;
 
 public class NotaResponse {
@@ -62,14 +64,9 @@ public class NotaResponse {
 		return corNota;
 	}
 	
-	public List<NotaResponse> toList(List<Nota> notas) {
-		List<NotaResponse> notasResponse = new ArrayList<NotaResponse>();
+	public Page<NotaResponse> toList(Page<Nota> notas) {
 		
-		for(Nota nota : notas) {
-			NotaResponse notaDto = new NotaResponse(nota);
-			notasResponse.add(notaDto);
-		}
-		return notasResponse;
+		return notas.map(NotaResponse::new);
 		
 	}
 	

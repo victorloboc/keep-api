@@ -8,6 +8,10 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.googlekeepapi.controller.dto.NotaResponse;
 import com.googlekeepapi.controller.dto.NotaRequest;
 import com.googlekeepapi.controller.dto.NotaRequestUpdate;
+import com.googlekeepapi.controller.dto.NotaResponse;
 import com.googlekeepapi.modelo.Nota;
 import com.googlekeepapi.modelo.Usuario;
 import com.googlekeepapi.repository.NotaRepository;
@@ -72,10 +76,13 @@ public class NotasController {
 	//LISTAR NOTAS DE CADA USUARIO
 	
 	@GetMapping("/{idUsuario}")
-	public ResponseEntity<List<NotaResponse>> listarNotas(@PathVariable Long idUsuario) {		
+	public ResponseEntity<Page<NotaResponse>> listarNotas(@PathVariable Long idUsuario,
+			@PageableDefault(sort = "id", direction = Direction.ASC, 
+			page = 0, size = 3) Pageable paginacao) {
+		
 		Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
 		if(usuarioOptional.isPresent()) {
-			List<Nota> notas = notaRepository.findByUsuario_Id(idUsuario);
+			Page<Nota> notas = notaRepository.findByUsuario_Id(idUsuario, paginacao);
 			return ResponseEntity.ok(new NotaResponse().toList(notas));
 		}
 			
